@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from './ui/button'
-import { SignedIn, SignedOut, SignIn, SignInButton, UserButton } from '@clerk/clerk-react'
+import { SignedIn, SignedOut, SignIn, SignInButton, UserButton, useUser } from '@clerk/clerk-react'
 import { BriefcaseBusiness, Heart, PenBox } from 'lucide-react'
 
 const Header = () => {
+  const {user} = useUser() ; 
   const [ showSignIn , setShowSignIn ] = useState(false) ;
   const [ search , setSearch ]= useSearchParams() ; 
   useEffect(()=>{ 
@@ -33,11 +34,11 @@ const Header = () => {
       
       </SignedOut>
       <SignedIn>
-        {/* add a condition here  */}
-      <Link to="/post-job"><Button variant ='destructive' className ="">
+       
+     { user?.unsafeMetadata?.role === "recruiter" && <Link to="/post-job"><Button variant ='destructive' className ="">
           <PenBox size={20} ></PenBox>
           Post a Job
-          </Button></Link>
+          </Button></Link>}
         <UserButton 
          appearance={{
           elements : { 

@@ -6,8 +6,25 @@ import { BarLoader } from "react-spinners";
 
 const Onboarding = () => {
   const { user, isLoaded } = useUser();
-  
-
+  const navigate = useNavigate() ; 
+  const handleRoleSelection = async(role)=>{ 
+      await user.update({ 
+        unsafeMetadata : {
+          role
+        },
+      }).then(()=>{ 
+          navigate(role == "recruiter" ? "/post-job" : "/jobs") ; 
+      }).catch((err)=>{
+        console.error("Error Updating Role :" , err ) ; 
+      })
+  }
+  useEffect(()=>{
+    if(user?.unsafeMetadata?.role){
+      navigate(
+        user?.unsafeMetadata?.role === "recruiter" ? "/post-job" : "/jobs" 
+      )
+    }
+  } , [user])
   if (!isLoaded) {
     return <BarLoader className="mb-4" width={"100%"} color="#36d7b7" />;
   }
